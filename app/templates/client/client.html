@@ -1,0 +1,104 @@
+
+{% extends './layout/nav_layout.html' %}
+{% block title %}Login{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+ 
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+<body class="text-center">
+
+    <div class="container-fluid">
+<form class="agregar" action="/update/{{ cliente.0 }}" method="POST">
+
+  <canvas class="my-4 w-100" id="myChart" width="700" height="580"></canvas>
+        
+    <h1 class="h3 mb-3 fw-normal">Información del cliente</h1>
+
+    <div class="form-floating">
+      <input type="text" name="fullname" class="form-control" id="fullname" value="{{ cliente.1 }}">
+      <label for="floatingInput">Nombre completo</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" name="address" class="form-control" id="address" placeholder="Domicilio" value="{{ cliente.2 }}">
+      <label for="floatingInput">Domicilio</label>
+    </div>
+    <div class="form-floating">
+        <input type="text" name="ip" class="form-control" id="ip" placeholder="ip" value="{{ cliente.3 }}">
+        <label for="floatingInput">Dirección IP</label>
+    </div>
+    <div class="form-floating">
+        <input type="tel" name="tel" class="form-control" id="tel" placeholder="Teléfono" value="{{ cliente.4 }}">
+        <label for="floatingInput">Teléfono</label>
+    </div>
+    <div class="form-floating">
+        <input type="email" name="email" class="form-control" id="email" placeholder="E-mail del cliente" value="{{ cliente.5 }}">
+        <label for="floatingInput">E-mail</label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Editar Información</button>
+
+  </form>
+
+  <form class="agregar" action="/update_abonos/{{ cliente.0 }}" method="POST">
+        
+    <h1 class="h3 mb-3 fw-normal">2023 abonos</h1>
+    <div class="form-floating">
+      <input type="number" name="enero" class="form-control" id="enero" value="{{ cliente.6 }}">
+      <label for="floatingInput">Febrero</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="febrero" class="form-control" id="febrero" value="{{ cliente.7 }}">
+      <label for="floatingInput">Febrero</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="marzo" class="form-control" id="marzo" value="{{ cliente.8 }}">
+      <label for="floatingInput">Marzo </label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="abril" class="form-control" id="abril" value="{{ cliente.9 }}">
+      <label for="floatingInput">Abril</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="mayo" class="form-control" id="mayo" value="{{ cliente.10 }}">
+      <label for="floatingInput">Mayo</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="junio" class="form-control" id="junio" value="{{ cliente.11 }}">
+      <label for="floatingInput">Junio</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="julio" class="form-control" id="julio" value="{{ cliente.12 }}">
+      <label for="floatingInput">Julio</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="agosto" class="form-control" id="agosto" value="{{ cliente.13 }}">
+      <label for="floatingInput">Agosto</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="septiembre" class="form-control" id="septiembre" value="{{ cliente.14 }}">
+      <label for="floatingInput">Septiembre</label>
+    </div>
+    <div class="form-floating">
+      <input type="number" name="octubre" class="form-control" id="octubre" value="{{ cliente.15 }}">
+      <label for="floatingInput">Octubre</label>
+      <div class="form-floating">
+        <input type="number" name="noviembre" class="form-control" id="noviembre" value="{{ cliente.16 }}">
+        <label for="floatingInput">Noviembre</label>
+      </div>
+      <div class="form-floating">
+        <input type="number" name="diciembre" class="form-control" id="diciembre" value="{{ cliente.17 }}">
+        <label for="floatingInput">Diciembre</label>
+      </div>
+    </div>
+    <button class="w-100 btn btn-lg btn-success" type="submit">Editar abonos</button>
+    <p class="mt-5 mb-3 text-muted">&copy;2022 Nitronet.</p>
+  </form></div>
+  <script src="{{ url_for('static', filename='../../../../static/js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='../../../../static/js/chart.min.js') }}"></script>
+</body>
+{% endblock %}
