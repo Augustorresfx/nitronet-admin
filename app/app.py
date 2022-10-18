@@ -1,15 +1,26 @@
-import dotenv
+
 from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
+from dotenv import load_dotenv
+import os
 from config import config
+
 from flask_login import LoginManager, login_user, logout_user, login_required
 #Modelos
 from models.ModelUser import ModelUser
-from py_dotenv import dotenv
-
+ 
 #Entities/Entidades
 from models.entities.User import User
+load_dotenv()
+
+
 app=Flask(__name__)
+
+
+
+
+total_sept=0
+total_septiembre=total_sept
 
 db=MySQL(app)
 
@@ -26,8 +37,8 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # print(request.form['username'])
-        # print(request.form['password'])
+        print(request.form['username'])
+        print(request.form['password'])
         user = User(0, request.form['username'], request.form['password'])
         logged_user = ModelUser.login(db, user)
         if logged_user != None:
@@ -54,13 +65,39 @@ def logout():
 def agregar():
     return render_template('client/agregar.html')
 
-@app.route('/buscar')
+@app.route('/buscar_cliente')
 @login_required
-def buscar(fullname, address, ip):
+def buscar_cliente():
+    return render_template('client/buscar.html')
+
+@app.route('/reportes')
+@login_required
+def reportes():
     cur = db.connection.cursor()
-    cur.execute('SELECT * FROM clientes_marilo_2023 WHERE fullname LIKE' + fullname + 'AND address LIKE' + address + 'AND ip LIKE' + ip, (fullname, address, ip))
+    cur.execute('SELECT * FROM clientes_marilo_2023')
     data = cur.fetchall()
-    return render_template('client/buscar.html', cliente = data[0])
+    acumulador_clientes=0
+    total_sept=0
+    for x in data:
+        if x[14] >= 1000:
+            acumulador_clientes+=1
+        total_sept+=x[14]
+        print(acumulador_clientes, total_sept)
+    return render_template('estadisticas/reportes.html', data = total_sept)
+
+@app.route('/buscar', methods = ['POST'])
+@login_required
+def buscar():
+    if request.method == 'POST':
+        fullname=request.form['fullname']
+        address=request.form['address']
+        ip=request.form['ip']
+        cur = db.connection.cursor()
+        cur.execute("""SELECT * FROM clientes_marilo_2023
+        WHERE fullname RLIKE %s""", (fullname,))
+        data = cur.fetchall()
+        print(data)
+        return render_template('client/buscar.html', clientes = data)
 
 @app.route('/home')
 @login_required
@@ -68,7 +105,6 @@ def home():
     cur = db.connection.cursor()
     cur.execute('SELECT * FROM clientes_marilo_2023')
     data = cur.fetchall()
-    print(data)
     return render_template('home.html', clientes = data)
 @app.route('/add_client', methods=['POST'])
 @login_required
@@ -156,4 +192,19 @@ def status_401(error):
 def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
 
+def create_app():
+   return app
+
+if __name__=='__main__':
+    """app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
+    app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
+    app.config["MYSQL_DB"] = os.getenv('MYSQL_DB')
+    app.config["MYSQL_PORT"] = os.getenv('MYSQL_PORT')
+    app.config["SECRET_KEY"] = os.getenv('SECRET_KEY')
+    app.config["MYSQL_HOST"] = os.getenv('MYSQL_HOST')
+    app.config["DEBUG"] = os.getenv('DEBUG') """
+    app.config.from_object(config['development'])
+    app.register_error_handler(401, status_401)
+    app.register_error_handler(404, status_404)
+    app.run()
 
