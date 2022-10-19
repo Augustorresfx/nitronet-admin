@@ -196,9 +196,6 @@ def create_app():
    return app
 
 if __name__=='__main__':
-    create_app = create_app()
-    create_app.run()
-else:
     gunicorn_app = app.run()
     """app.config["MYSQL_USER"] = os.getenv('MYSQL_USER')
     app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD')
@@ -210,5 +207,4 @@ else:
     app.config.from_object(config['development'])
     app.register_error_handler(401, status_401)
     app.register_error_handler(404, status_404)
-    app.run()
 
